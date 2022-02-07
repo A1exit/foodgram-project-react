@@ -10,9 +10,9 @@ class CharFilterInFilter(filters.BaseInFilter, filters.CharFilter):
 
 
 class RecipeFilter(FilterSet):
-    is_favorited = BooleanFilter(method="filter_is_favorited",
+    is_favorited = BooleanFilter(method='filter_is_favorited',
                                  widget=BooleanWidget())
-    in_shopping_cart = BooleanFilter(method="filter_is_favorited",
+    in_shopping_cart = BooleanFilter(method='filter_is_favorited',
                                      widget=BooleanWidget())
     tags = AllValuesMultipleFilter(field_name='tags__slug')
 

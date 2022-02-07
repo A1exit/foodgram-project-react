@@ -25,6 +25,10 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'Тэг'
+        verbose_name_plural = "Тэги"
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -40,6 +44,10 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = "Ингредиенты"
 
 
 class Recipe(models.Model):
@@ -87,6 +95,10 @@ class Recipe(models.Model):
     def favorites_count(self):
         return self.favorites.count()
 
+    class Meta:
+        verbose_name = 'Рецепт'
+        verbose_name_plural = "Рецепты"
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
@@ -112,6 +124,10 @@ class RecipeIngredient(models.Model):
     def __str__(self):
         return f'{self.recipe.name} {self.ingredients.name}'
 
+    class Meta:
+        verbose_name = 'Рецепт и ингредиенты'
+        verbose_name_plural = "Рецепты и ингредиенты"
+
 
 class Favorite(models.Model):
     user = models.ForeignKey(
@@ -128,6 +144,14 @@ class Favorite(models.Model):
     def __str__(self):
         return f'{self.user}, {self.recipe}'
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'recipe'],
+                                    name='favorite')
+        ]
+        verbose_name = 'Избранное'
+        verbose_name_plural = "Избранное"
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
@@ -143,3 +167,11 @@ class ShoppingCart(models.Model):
 
     def __str__(self):
         return f'{self.user}, {self.recipe}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'recipe'],
+                                    name='shopping_cart')
+        ]
+        verbose_name = 'Список покупок'
+        verbose_name_plural = "Списки покупок"

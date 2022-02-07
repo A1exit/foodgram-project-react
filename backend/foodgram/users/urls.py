@@ -6,8 +6,8 @@ from .views import ListSubscriptions, Subscribe
 
 router = SimpleRouter()
 
-router.register(r"users/subscriptions", ListSubscriptions,
-                basename="subscriptions")
+router.register('users/subscriptions', ListSubscriptions,
+                basename='subscriptions')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -38,6 +38,10 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = "Пользователи"
+
 
 class Follow(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE,
@@ -47,3 +51,11 @@ class Follow(models.Model):
 
     def __str__(self):
         return f'{self.user}, {self.author}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'],
+                                    name='user_author')
+        ]
+        verbose_name = 'Подписки'
+        verbose_name_plural = "Подписки"

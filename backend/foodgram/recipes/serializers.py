@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from users.serializers import UserSerializer
-
 from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                      ShoppingCart, Tag)
 
@@ -36,19 +35,19 @@ class ViewRecipeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_is_favorited(self, recipe):
-        if (self.context['request'].user.is_authenticated
-                and Favorite.objects.filter(
-                    recipe=recipe,
-                    user=self.context['request'].user).exists()
-                and self.context['request'].user.is_authenticated):
+        user = self.context['request'].user
+        if (user.is_authenticated
+                and Favorite.objects.filter(recipe=recipe, user=user).exists()
+                and user.is_authenticated):
             return True
         return False
 
     def get_is_in_shopping_cart(self, recipe):
-        if (self.context['request'].user.is_authenticated
+        user = self.context['request'].user
+        if (user.is_authenticated
             and ShoppingCart.objects.filter(
-                recipe=recipe,
-                user=self.context['request'].user).exists()):
+                    recipe=recipe,
+                    user=user).exists()):
             return True
         return False
 

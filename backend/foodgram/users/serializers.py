@@ -1,8 +1,8 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from djoser.compat import get_user_email, get_user_email_field_name
 from djoser.conf import settings
-from djoser.serializers import \
-    UserCreateSerializer as BaseUserRegistrationSerializer
+from djoser.serializers import (UserCreateSerializer
+                                as BaseUserRegistrationSerializer)
 from rest_framework import serializers
 
 from recipes.models import Recipe
@@ -13,12 +13,13 @@ User = get_user_model()
 
 
 class TokenCreateSerializer(serializers.Serializer):
-    password = serializers.CharField(required=True,
-                                     style={"input_type": "password"})
+    password = serializers.CharField(required=False,
+                                     style={'input_type': 'password'})
+
     default_error_messages = {
-        "invalid_credentials":
+        'invalid_credentials':
             settings.CONSTANTS.messages.INVALID_CREDENTIALS_ERROR,
-        "inactive_account":
+        'inactive_account':
             settings.CONSTANTS.messages.INACTIVE_ACCOUNT_ERROR,
     }
 
@@ -28,6 +29,20 @@ class TokenCreateSerializer(serializers.Serializer):
 
         self.email_field = get_user_email_field_name(User)
         self.fields[self.email_field] = serializers.EmailField()
+
+    def validate(self, attrs):
+        password = attrs.get('password')
+        email = attrs.get('email')
+        self.user = authenticate(
+            request=self.context.get('request'), email=email, password=password
+        )
+        if not self.user:
+            self.user = User.objects.filter(email=email).first()
+            if self.user and not self.user.check_password(password):
+                self.fail('invalid_credentials')
+        if self.user and self.user.is_active:
+            return attrs
+        self.fail('invalid_credentials')
 
 
 class UserRegistrationSerializer(BaseUserRegistrationSerializer):
@@ -45,16 +60,17 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email',
-                  'id',
+        fields = ('id',
+                  'email',
                   'username',
                   'first_name',
                   'last_name',
                   'is_subscribed')
 
     def get_is_subscribed(self, author):
+        user = self.context['request'].user
         if (self.context['request'].user.is_authenticated
-                and Follow.objects.filter(user=self.context['request'].user,
+                and Follow.objects.filter(user=user,
                                           author=author).exists()):
             return True
         return False
@@ -65,7 +81,7 @@ class UserSerializer(serializers.ModelSerializer):
             instance_email = get_user_email(instance)
             if instance_email != validated_data[email_field]:
                 instance.is_active = False
-                instance.save(update_fields=["is_active"])
+                instance.save(update_fields=['is_active'])
         return super().update(instance, validated_data)
 
 
