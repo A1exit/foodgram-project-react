@@ -27,7 +27,7 @@ class Tag(models.Model):
 
     class Meta:
         verbose_name = 'Тэг'
-        verbose_name_plural = "Тэги"
+        verbose_name_plural = 'Тэги'
 
 
 class Ingredient(models.Model):
@@ -65,8 +65,8 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-        verbose_name="Тэги",
-        related_name="recipes"
+        verbose_name='Тэги',
+        related_name='recipes'
     )
     image = models.CharField(
         max_length=300,
@@ -83,8 +83,8 @@ class Recipe(models.Model):
     )
     cooking_time = models.PositiveIntegerField(
         validators=[MinValueValidator(1,
-                                      message="Минимальное время "
-                                              "приготовления - одна минута")],
+                                      message='Минимальное время'
+                                              'приготовления - одна минута')],
         blank=False,
         verbose_name='Время приготовления (в минутах)'
     )
@@ -97,7 +97,7 @@ class Recipe(models.Model):
 
     class Meta:
         verbose_name = 'Рецепт'
-        verbose_name_plural = "Рецепты"
+        verbose_name_plural = 'Рецепты'
 
 
 class RecipeIngredient(models.Model):
@@ -115,9 +115,9 @@ class RecipeIngredient(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         blank=False,
-        verbose_name="Количество ингредиентов",
+        verbose_name='Количество ингредиентов',
         validators=(
-            MinValueValidator(1, "Минимальное количество ингредиентов 1"),
+            MinValueValidator(1, 'Минимальное количество ингредиентов 1'),
         )
     )
 
@@ -126,7 +126,7 @@ class RecipeIngredient(models.Model):
 
     class Meta:
         verbose_name = 'Рецепт и ингредиенты'
-        verbose_name_plural = "Рецепты и ингредиенты"
+        verbose_name_plural = 'Рецепты и ингредиенты'
 
 
 class Favorite(models.Model):
@@ -150,7 +150,7 @@ class Favorite(models.Model):
                                     name='favorite')
         ]
         verbose_name = 'Избранное'
-        verbose_name_plural = "Избранное"
+        verbose_name_plural = 'Избранное'
 
 
 class ShoppingCart(models.Model):
@@ -174,4 +174,4 @@ class ShoppingCart(models.Model):
                                     name='shopping_cart')
         ]
         verbose_name = 'Список покупок'
-        verbose_name_plural = "Списки покупок"
+        verbose_name_plural = 'Списки покупок'

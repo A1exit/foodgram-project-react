@@ -6,7 +6,6 @@ from djoser.serializers import (UserCreateSerializer
 from rest_framework import serializers
 
 from recipes.models import Recipe
-
 from .models import Follow
 
 User = get_user_model()
@@ -69,7 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, author):
         user = self.context['request'].user
-        if (self.context['request'].user.is_authenticated
+        if (user.is_authenticated
                 and Follow.objects.filter(user=user,
                                           author=author).exists()):
             return True

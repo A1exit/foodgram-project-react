@@ -12,4 +12,5 @@ pytz==2020.1
 sqlparse==0.3.1
 djoser==2.1.0
 reportlab==3.6.6
+python-dotenv==0.19.2
 

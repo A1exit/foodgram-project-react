@@ -1,19 +1,11 @@
-import io
-
-from django.db.models import F, Sum
-from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
 from rest_framework import filters, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .filters import RecipeFilter
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     ShoppingCart, Tag)
+from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from .permissions import AuthorOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientsSerializer, TagSerializer,
@@ -49,22 +41,29 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return CreateRecipeSerializer
 
 
+def delete(request, id, model):
+    user = request.user
+    recipe = get_object_or_404(Recipe, id=id)
+    obj = get_object_or_404(model, user=user, recipe=recipe)
+    obj.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def post(request, id, model):
+    user = request.user
+    recipe = get_object_or_404(Recipe, id=id)
+    model.objects.get_or_create(user=user, recipe=recipe)
+    serializer = FavoriteSerializer(recipe, context={'request': request})
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 class APIFavorite(APIView):
 
     def delete(self, request, id):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=id)
-        subscription = get_object_or_404(Favorite, user=user,
-                                         recipe=recipe)
-        subscription.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return delete(request, id, Favorite)
 
     def post(self, request, id):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=id)
-        Favorite.objects.get_or_create(user=user, recipe=recipe)
-        serializer = FavoriteSerializer(recipe, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return post(request, id, Favorite)
 
 
 class APIShoppingCart(APIView):
@@ -73,16 +72,7 @@ class APIShoppingCart(APIView):
         return get_shopping_list(self, request)
 
     def delete(self, request, id):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=id)
-        subscription = get_object_or_404(ShoppingCart, user=user,
-                                         recipe=recipe)
-        subscription.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return delete(request, id, ShoppingCart)
 
     def post(self, request, id):
-        user = request.user
-        recipe = get_object_or_404(Recipe, id=id)
-        ShoppingCart.objects.get_or_create(user=user, recipe=recipe)
-        serializer = FavoriteSerializer(recipe, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return post(request, id, ShoppingCart)

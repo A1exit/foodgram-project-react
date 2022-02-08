@@ -36,9 +36,8 @@ class ViewRecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, recipe):
         user = self.context['request'].user
-        if (user.is_authenticated
-                and Favorite.objects.filter(recipe=recipe, user=user).exists()
-                and user.is_authenticated):
+        if (user.is_authenticated and
+                Favorite.objects.filter(recipe=recipe, user=user).exists()):
             return True
         return False
 
