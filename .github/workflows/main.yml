@@ -65,7 +65,7 @@ jobs:
             sudo docker pull ${{  secrets.DOCKER_USERNAME  }}/foodgram
             sudo docker-compose stop
             sudo docker-compose rm backend
-            touch /home/backend/foodgram/.env
+            touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
