@@ -68,9 +68,9 @@ class Recipe(models.Model):
         verbose_name='Тэги',
         related_name='recipes'
     )
-    image = models.CharField(
-        max_length=300,
-        verbose_name='Картинка, закодированная в Base64'
+    image = models.ImageField(
+        verbose_name="Картинка",
+        upload_to="media/recipes/images/"
     )
     name = models.CharField(
         max_length=200,

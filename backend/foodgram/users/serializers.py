@@ -95,7 +95,7 @@ class FollowingRecipeSerializer(serializers.ModelSerializer):
 
 
 class SubscriptionsSerializer(serializers.ModelSerializer):
-    recipe = serializers.SerializerMethodField()
+    recipes = serializers.SerializerMethodField()
     is_subscribed = serializers.SerializerMethodField()
     recipes_count = serializers.SerializerMethodField()
 
@@ -107,10 +107,10 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
                   'first_name',
                   'last_name',
                   'is_subscribed',
-                  'recipe',
+                  'recipes',
                   'recipes_count',)
 
-    def get_recipe(self, author):
+    def get_recipes(self, author):
         recipes = author.recipes.all()
         return FollowingRecipeSerializer(recipes, many=True).data
 
