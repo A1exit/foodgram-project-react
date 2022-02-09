@@ -8,10 +8,10 @@ services:
       - .env
 
   backend:
-#    build:
-#      context: ../backend/foodgram
-#      dockerfile: Dockerfile
-    image: a1exit/foodgram:latest
+    build:
+      context: ../backend/foodgram
+      dockerfile: Dockerfile
+#    image: a1exit/foodgram:latest
     restart: always
     volumes:
       - static_value:/app/static/
