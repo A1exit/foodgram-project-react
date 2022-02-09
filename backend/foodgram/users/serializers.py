@@ -4,8 +4,7 @@ from rest_framework import serializers
 
 from djoser.compat import get_user_email, get_user_email_field_name
 from djoser.conf import settings
-from djoser.serializers import (UserCreateSerializer
-                                as BaseUserRegistrationSerializer)
+from djoser.serializers import UserCreateSerializer
 
 from recipes.models import Recipe
 
@@ -47,8 +46,8 @@ class TokenCreateSerializer(serializers.Serializer):
         self.fail('invalid_credentials')
 
 
-class UserRegistrationSerializer(BaseUserRegistrationSerializer):
-    class Meta(BaseUserRegistrationSerializer.Meta):
+class UserRegistrationSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
         fields = ('email',
                   'id',
                   'username',
