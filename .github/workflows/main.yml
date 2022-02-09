@@ -20,9 +20,9 @@ jobs:
         cd backend/foodgram
         pip install -r requirements.txt
 
-    - name: Test with flake8 and django tests
-      run: |
-        python -m flake8
+#    - name: Test with flake8 and django tests
+#      run: |
+#        python -m flake8
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -65,7 +65,7 @@ jobs:
             sudo docker pull ${{  secrets.DOCKER_USERNAME  }}/foodgram
             sudo docker-compose stop
             sudo docker-compose rm backend
-            touch .env
+            touch /home/backend/foodgram/.env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
