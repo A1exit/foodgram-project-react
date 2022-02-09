@@ -4,8 +4,8 @@ from rest_framework import serializers
 
 from djoser.compat import get_user_email, get_user_email_field_name
 from djoser.conf import settings
-from djoser.serializers import \
-    UserCreateSerializer as BaseUserRegistrationSerializer
+from djoser.serializers import (UserCreateSerializer
+                                as BaseUserRegistrationSerializer)
 
 from recipes.models import Recipe
 
