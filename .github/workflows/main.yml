@@ -20,9 +20,9 @@ jobs:
         cd backend/foodgram
         pip install -r requirements.txt
 
-#    - name: Test with flake8 and django tests
-#      run: |
-#        python -m flake8
+    - name: Test with flake8 and django tests
+      run: |
+        python -m flake8
 
   build_and_push_to_docker_hub:
     name: Push Docker image to Docker Hub
@@ -41,13 +41,21 @@ jobs:
           username: ${{  secrets.DOCKER_USERNAME  }}
           password: ${{  secrets.DOCKER_PASSWORD  }}
 
-      - name: Push to Docker Hub
+      - name: Push backend to Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: ./backend/foodgram
           file: ./backend/foodgram/Dockerfile
           push: true
-          tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram:latest
+          tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_backend:latest
+
+      - name: Push frontend to Docker Hub
+          uses: docker/build-push-action@v2
+          with:
+            context: ./frontend
+            file: ./frontend/Dockerfile
+            push: true
+            tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,7 +70,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull ${{  secrets.DOCKER_USERNAME  }}/foodgram
+            sudo docker pull ${{  secrets.DOCKER_USERNAME  }}/foodgram_backend
             sudo docker-compose stop
             sudo docker-compose rm backend
             touch .env
