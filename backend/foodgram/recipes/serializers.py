@@ -110,6 +110,15 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                   'is_favorited',
                   'is_in_shopping_cart',)
 
+    def create_ingredients(self, ingredients, recipe):
+        for ingredient in ingredients:
+            current_ingredient = ingredient["id"]
+            RecipeIngredient.objects.create(
+                ingredients=current_ingredient,
+                recipe=recipe,
+                amount=ingredient["amount"],
+            )
+
     def create(self, validated_data):
         author = self.context["request"].user
         tags = validated_data.pop("tags")
@@ -119,15 +128,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             recipe.tags.add(tag)
         self.create_ingredients(ingredients, recipe)
         return recipe
-
-    def create_ingredients(self, ingredients, recipe):
-        for ingredient in ingredients:
-            current_ingredient = ingredient["id"]
-            RecipeIngredient.objects.create(
-                ingredients=current_ingredient,
-                recipe=recipe,
-                amount=ingredient["amount"],
-            )
 
     def update(self, recipe, validated_data):
         if "ingredient_to_recipe" in validated_data:

@@ -9,7 +9,7 @@ from .filters import IngredientSearchFilter, RecipeFilter
 from .models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from .permissions import AuthorOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
-                          IngredientsSerializer, TagSerializer,
+                          IngredientSerializer, TagSerializer,
                           ViewRecipeSerializer)
 from .utils import get_shopping_list
 
@@ -24,7 +24,7 @@ class TagViewSet(viewsets.ModelViewSet):
 
 class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
-    serializer_class = IngredientsSerializer
+    serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
     pagination_class = None
     http_method_names = ["get"]
