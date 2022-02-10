@@ -55,7 +55,7 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_frontend:latestт
+          tags: ${{  secrets.DOCKER_USERNAME  }}/foodgram_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
