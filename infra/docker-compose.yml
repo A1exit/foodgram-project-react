@@ -11,7 +11,7 @@ services:
 #    build:
 #      context: ../backend/foodgram
 #      dockerfile: Dockerfile
-    image: a1exit/foodgram_back:latest
+    image: a1exit/foodgram_backend:latest
     restart: always
     volumes:
       - static_value:/app/static/
@@ -27,7 +27,7 @@ services:
 #    build:
 #      context: ../frontend
 #      dockerfile: Dockerfile
-    image: a1exit/foodgram_front:latest
+    image: a1exit/foodgram_frontend:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
