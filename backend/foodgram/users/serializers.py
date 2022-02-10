@@ -1,12 +1,9 @@
 from django.contrib.auth import authenticate, get_user_model
-
-from rest_framework import serializers
-
 from djoser.compat import get_user_email, get_user_email_field_name
 from djoser.conf import settings
 from djoser.serializers import UserCreateSerializer
-
 from recipes.models import Recipe
+from rest_framework import serializers
 
 from .models import Follow
 
@@ -43,7 +40,6 @@ class TokenCreateSerializer(serializers.Serializer):
                 self.fail('invalid_credentials')
         if self.user and self.user.is_active:
             return attrs
-        self.fail('invalid_credentials')
 
 
 class UserRegistrationSerializer(UserCreateSerializer):

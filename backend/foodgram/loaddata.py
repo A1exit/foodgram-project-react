@@ -1,7 +1,6 @@
 import json
 
 from django.db import transaction
-
 from recipes.models import Ingredient
 
 json_file_path = '/Users/alex/Dev/foodgram-project-react/data/ingredients.json'
