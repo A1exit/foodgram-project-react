@@ -32,7 +32,8 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
 class ViewRecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
-    ingredients = IngredientInRecipeSerializer(many=True, read_only=True)
+    ingredients = IngredientInRecipeSerializer(source="ingredient_to_recipe",
+                                               many=True)
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -66,13 +67,6 @@ class ViewRecipeSerializer(serializers.ModelSerializer):
                 user=user).exists()):
             return True
         return False
-
-
-class TestSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Recipe
-        fields = '__all__'
 
 
 class AddRecipeIngredientsSerializer(serializers.ModelSerializer):
