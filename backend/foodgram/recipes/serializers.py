@@ -85,6 +85,13 @@ class AddRecipeIngredientsSerializer(serializers.ModelSerializer):
     def get_name(self, ingredient):
         return ingredient.ingredients.name
 
+    def validate_amount(self, value):
+        if value < 1:
+            raise serializers.ValidationError(
+                'Убедитесь, что количество ингредиентов больше 1'
+            )
+        return value
+
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
     ingredients = AddRecipeIngredientsSerializer(
